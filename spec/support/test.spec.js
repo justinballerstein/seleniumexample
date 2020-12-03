@@ -1,15 +1,16 @@
 const {By} = require('selenium-webdriver');
 
-describe("the thing", function(){
+describe("Halfaker.com", function(){
 
-    it("should do what I like", async function() {
-
+    it("should go to the Covid 19 Statement page when we click Learn more", async function() {
         await this.driver.get('http://www.halfaker.com');
-        await this.driver.sleep(5000);
-        let LearnMore = await this.driver.findElement (By.css('a[href="https://www.halfaker.com/covid-19-statement/"]'));
+        await this.driver.sleep(10000);
+        let LearnMore = await this.driver.findElement (By.css('div.covid-link a'));
         await LearnMore.click();
-        await this.driver.sleep(5000);
-        
+        await this.driver.sleep(10000);
+        let expectedTitle = 'Novel Coronavirus (COVID-19) Statement | Halfaker & Associates, LLC.';
+        let actualTitle = await this.driver.getTitle();
+        expect(actualTitle).toEqual(expectedTitle);
     });
 
 });
