@@ -8,7 +8,7 @@ describe("Halfaker.com", function(){
         let LearnMore = await this.driver.findElement (By.css('div.covid-link a'));
         await LearnMore.click();
         await this.driver.sleep(2000);
-        let expectedTitle = 'Novel Justin (COVID-19) Statement | Halfaker & Associates, LLC.';
+        let expectedTitle = 'Novel Coronavirus (COVID-19) Statement | Halfaker & Associates, LLC.';
         let actualTitle = await this.driver.getTitle();
         expect(actualTitle).toEqual(expectedTitle);
     });

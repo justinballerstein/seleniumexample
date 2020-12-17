@@ -2,7 +2,7 @@ const {By} = require('selenium-webdriver');
 
 describe("Halfaker.com", function(){
 
-    it("should type text in the text box", async function() {
+    xit("should type text in the text box", async function() {
         await this.driver.get('http://www.halfaker.com');
         await this.driver.sleep(2000);
 
