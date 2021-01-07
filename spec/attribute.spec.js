@@ -2,7 +2,7 @@ const {By} = require('selenium-webdriver');
 
 describe("Halfaker.com", function(){
 
-    it("should get the attribute of a web element", async function() {
+    xit("should get the attribute of a web element", async function() {
         await this.driver.get('http://www.halfaker.com');
         await this.driver.sleep(2000);
         let expectedLearnMoreLink = 'https://www.halfaker.com/our-story/';
@@ -15,7 +15,7 @@ describe("Halfaker.com", function(){
 
     });
 
-    it("should spell Ken's name correctly on the image tag", async function() {
+    xit("should spell Ken's name correctly on the image tag", async function() {
         await this.driver.get('http://www.halfaker.com');
         await this.driver.sleep(2000);
         let expectedDescription = 'Portrait of Ken Georgi';

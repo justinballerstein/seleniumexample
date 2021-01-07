@@ -2,7 +2,7 @@ const {By} = require('selenium-webdriver');
 
 describe("Halfaker.com", function(){
 
-    it("should get the css value of a web element", async function() {
+    xit("should get the css value of a web element", async function() {
         await this.driver.get('http://www.halfaker.com');
         await this.driver.sleep(2000);
         let HALFAKER_COLORS = {};
