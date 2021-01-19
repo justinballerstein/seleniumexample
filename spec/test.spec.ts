@@ -1,5 +1,3 @@
-const {By} = require('selenium-webdriver');
-
 describe("Halfaker.com", function(){
 
     it("should go to the Covid 19 Statement page when we click Learn more", async function() {
