@@ -8,6 +8,7 @@ import { Builder, Capabilities, By } from 'selenium-webdriver';
 
 const browser = new function() {
     this.driver;
+    this.site = 'https://www.halfaker.com/';
     this.waitForPageToLoad = async () => {
         await this.sleep(2000);
     };
@@ -17,8 +18,8 @@ const browser = new function() {
     this.end = async () => {
         this.driver.quit();
     };
-    this.get = async (url: string) => {
-        await this.driver.get(url);
+    this.get = async (route: string) => {
+        await this.driver.get(this.site + route);
         await this.waitForPageToLoad();
     };
     this.click = async (locator: string) => {
