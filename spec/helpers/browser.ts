@@ -2,7 +2,7 @@ const chrome = require('selenium-webdriver/chrome');
 var path = require('chromedriver').path;
 var service = new chrome.ServiceBuilder(path).build();
 chrome.setDefaultService(service);
-
+let fs = require('fs');
 import { Builder, Capabilities, By } from 'selenium-webdriver';
 
 
@@ -34,6 +34,12 @@ const browser = new function() {
         let title = await this.driver.getTitle();
         return title;
     };
+    this.takeScreenshot = async (location: string, filename: string) => {
+        let body = await this.driver.findElement(By.css('body'));
+        let encodedString = await body.takeScreenshot(true);
+        await fs.writeFileSync(location + filename, encodedString, 'base64');
+    };
+    
   };
 
 export {browser}
