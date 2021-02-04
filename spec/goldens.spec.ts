@@ -4,7 +4,7 @@ describe("Halfaker.com", function(){
         const location = './spec/goldens/';
         const filename_prefix = 'halfaker.com.';
         const filename_sufix = '.png';
-
+        this.browser.browserBig();
         for (let i = 0; i < this.halfaker.com.catalog.length; i++) {
             let friendly_route_name = this.halfaker.com.catalog[i].replace(new RegExp('/', 'g'), '.');;
             let filename = filename_prefix + friendly_route_name + filename_sufix;

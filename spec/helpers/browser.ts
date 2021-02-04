@@ -13,7 +13,7 @@ const browser = new function() {
         await this.sleep(2000);
     };
     this.start = async () => {
-        this.driver = await new Builder().withCapabilities(Capabilities.chrome()).build();
+        this.driver = await new Builder().withCapabilities(Capabilities.chrome()).setChromeOptions(new chrome.Options().headless()).build();
     };
     this.end = async () => {
         this.driver.quit();
@@ -39,7 +39,9 @@ const browser = new function() {
         let encodedString = await body.takeScreenshot(true);
         await fs.writeFileSync(location + filename, encodedString, 'base64');
     };
-    
+    this.browserBig = async() => {
+        await this.driver.manage().window().setRect({ width: 1024, height: 3000 });
+    };
   };
 
 export {browser}
