@@ -1,3 +1,4 @@
 node_modules
 debug.log
-spec/screenshots
+spec/goldens/*.test.png
+spec/goldens/*.dif.png

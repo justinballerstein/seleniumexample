@@ -12,6 +12,9 @@ const browser = new function() {
     this.waitForPageToLoad = async () => {
         await this.sleep(2000);
     };
+    this.fileExists =  (location, uri) => {
+        return fs.existsSync(location + uri);
+    };
     this.start = async () => {
         this.driver = await new Builder().withCapabilities(Capabilities.chrome()).setChromeOptions(new chrome.Options().headless()).build();
     };
