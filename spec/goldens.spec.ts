@@ -1,4 +1,4 @@
-var looksSame = require('looks-same');
+import { browser } from "./helpers/browser";
 
 describe("Halfaker.com", function(){
 
@@ -7,6 +7,8 @@ describe("Halfaker.com", function(){
         const filename_prefix = 'halfaker.com.';
         const filename_sufix = '.png';
         await this.browser.browserBig();
+        let results: Array<{ difference: boolean, pagename: string }> = [];
+        let pass = true;
         for (let i = 0; i < this.halfaker.com.catalog.length; i++) {
             await this.browser.get(this.halfaker.com.catalog[i]);
             let friendly_route_name = this.halfaker.com.catalog[i].replace(new RegExp('/', 'g'), '.');;
@@ -22,26 +24,21 @@ describe("Halfaker.com", function(){
             }
             console.log(await this.browser.getTitle());
             if (goldenExists) {
-                looksSame(location + goldenfilename, location + testfilename, {tolerance: 1}, function(error, {equal, diffBounds, diffClusters}) {
-                    if(equal != true) {
-                      looksSame.createDiff({
-                        reference: location + goldenfilename,
-                        current: location + testfilename,
-                        diff: location + diffilename,
-                        highlightColor: '#ff00ff', // color to highlight the differences
-                        strict: false, // strict comparsion
-                        tolerance: 1,
-                        antialiasingTolerance: 1,
-                        ignoreAntialiasing: true, // ignore antialising by default
-                        ignoreCaret: true // ignore caret by default
-                      }, function(error) {
-                      });
-                    } else {
-                      console.log("test passed");
-                    };
-                });
+                let result = await browser.lookTheSame(location, goldenfilename, testfilename, diffilename, friendly_route_name)
+                console.log(result);
+                if (result.difference == true){
+                    pass = false;
+                    console.warn("Difference found: " + result.pagename);
+                } else {
+                    console.info("Screenshot check passed");
+                };
+                
+                results.push(result);
             };
         };
+        console.info(results);
+        console.info(pass);
+        expect(pass).toBeTrue();
     });
 
 });

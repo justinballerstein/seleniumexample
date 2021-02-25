@@ -3,6 +3,7 @@ var path = require('chromedriver').path;
 var service = new chrome.ServiceBuilder(path).build();
 chrome.setDefaultService(service);
 let fs = require('fs');
+let looksSame = require('looks-same');
 import { Builder, Capabilities, By } from 'selenium-webdriver';
 
 
@@ -10,10 +11,46 @@ const browser = new function() {
     this.driver;
     this.site = 'https://www.halfaker.com/';
     this.waitForPageToLoad = async () => {
-        await this.sleep(2000);
+        await this.sleep(3000);
     };
     this.fileExists =  (location, uri) => {
         return fs.existsSync(location + uri);
+    };
+    this.lookTheSame =  async (location, goldenfilename, testfilename, diffilename, pagename) => {
+        let tol = 40
+        let result = {difference: false, pagename};
+        await looksSame(location + goldenfilename,
+             location + testfilename,
+             { tolerance:tol }, 
+              async function(error, {equal, diffBounds, diffClusters}) {
+            if(equal != true) {
+              
+              console.log(diffClusters);
+              let safezone = {left: 1210, top: 1886, right: 1416, bottom: 2254}
+              let ignoreClusters = true;
+              for (const cluster of diffClusters) {
+                    if ( cluster.left < safezone.left
+                        || cluster.top < safezone.top
+                        || cluster.right > safezone.right
+                        || cluster.bottom > safezone.bottom
+                    ) {
+                        ignoreClusters = false;
+                    }
+              };
+              if (ignoreClusters == false) {
+                result.difference = true;
+                await looksSame.createDiff({
+                    reference: location + goldenfilename,
+                    current: location + testfilename,
+                    diff: location + diffilename,
+                    tolerance: tol,
+                    highlightColor: '#ff00ff', // color to highlight the differences
+                }, function(error) {
+              });
+            };
+            };
+        });
+        return result;
     };
     this.start = async () => {
         this.driver = await new Builder().withCapabilities(Capabilities.chrome()).setChromeOptions(new chrome.Options().headless()).build();
@@ -43,7 +80,7 @@ const browser = new function() {
         await fs.writeFileSync(location + filename, encodedString, 'base64');
     };
     this.browserBig = async() => {
-        await this.driver.manage().window().setRect({ width: 1024, height: 3000 });
+        await this.driver.manage().window().setRect({ width: 1920, height: 3000 });
     };
   };
 
