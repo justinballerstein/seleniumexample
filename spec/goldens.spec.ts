@@ -10,8 +10,8 @@ describe("Halfaker.com", function(){
         let results: Array<{ difference: boolean, pagename: string }> = [];
         let pass = true;
         for (let i = 0; i < this.halfaker.com.catalog.length; i++) {
-            await this.browser.get(this.halfaker.com.catalog[i]);
-            let friendly_route_name = this.halfaker.com.catalog[i].replace(new RegExp('/', 'g'), '.');;
+            await this.browser.get(this.halfaker.com.catalog[i].route);
+            let friendly_route_name = this.halfaker.com.catalog[i].route.replace(new RegExp('/', 'g'), '.');;
             let goldenfilename = filename_prefix + friendly_route_name + filename_sufix;
             let testfilename = filename_prefix + friendly_route_name + '.test' + filename_sufix;
             let diffilename = filename_prefix + friendly_route_name + '.dif' + filename_sufix;
@@ -24,7 +24,7 @@ describe("Halfaker.com", function(){
             }
             console.log(await this.browser.getTitle());
             if (goldenExists) {
-                let result = await browser.lookTheSame(location, goldenfilename, testfilename, diffilename, friendly_route_name)
+                let result = await browser.lookTheSame(location, goldenfilename, testfilename, diffilename, friendly_route_name, this.halfaker.com.catalog[i].safezone)
                 console.log(result);
                 if (result.difference == true){
                     pass = false;

@@ -16,7 +16,7 @@ const browser = new function() {
     this.fileExists =  (location, uri) => {
         return fs.existsSync(location + uri);
     };
-    this.lookTheSame =  async (location, goldenfilename, testfilename, diffilename, pagename) => {
+    this.lookTheSame =  async (location, goldenfilename, testfilename, diffilename, pagename, safezones) => {
         let tol = 40
         let result = {difference: false, pagename};
         await looksSame(location + goldenfilename,
@@ -26,19 +26,24 @@ const browser = new function() {
             if(equal != true) {
               
               console.log(diffClusters);
-              let safezone = {left: 1210, top: 1886, right: 1416, bottom: 2254}
               let ignoreClusters = true;
-              for (const cluster of diffClusters) {
-                    if ( cluster.left < safezone.left
-                        || cluster.top < safezone.top
-                        || cluster.right > safezone.right
-                        || cluster.bottom > safezone.bottom
-                    ) {
+                  for (const cluster of diffClusters) {
+                    let inASafeZone = false;
+                    for (const safezone of safezones) {
+                        if ( cluster.left < safezone.left
+                            || cluster.top < safezone.top
+                            || cluster.right > safezone.right
+                            || cluster.bottom > safezone.bottom
+                        ) {
+                            inASafeZone = true;
+                        }
+                    }
+                    if (!inASafeZone) {
                         ignoreClusters = false;
                     }
-              };
-              if (ignoreClusters == false) {
-                result.difference = true;
+                  };
+                if (ignoreClusters == false) {
+                    result.difference = true;
                 await looksSame.createDiff({
                     reference: location + goldenfilename,
                     current: location + testfilename,
